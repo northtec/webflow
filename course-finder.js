@@ -146,5 +146,40 @@ window.fsAttributes.push([
       script.async = false;
       document.body.appendChild(script);
     });
+
+    const [listInstance] = listInstances;
+    listInstance.on("renderitems", (renderedItems) => {
+      if (window.fsAttributes.cmsfilter) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const area = urlParams.get("area");
+        const term = urlParams.get("*");
+        const networkProgrammes = document.querySelectorAll(
+          ".network-programmes .w-dyn-item"
+        );
+        let results = 0;
+        for (let i = 0; i < networkProgrammes.length; i++) {
+          const networkArea = networkProgrammes[i].querySelector(
+            '[fs-cmsfilter-field="Area"]'
+          );
+          const networkText = networkProgrammes[i].textContent.toLowerCase();
+          if (
+            networkArea.textContent === area ||
+            networkText.includes(term?.toLowerCase())
+          ) {
+            networkProgrammes[i].classList.remove("hidden");
+            results++;
+          } else {
+            networkProgrammes[i].classList.add("hidden");
+          }
+        }
+        results
+          ? document
+              .querySelector(".network-programmes")
+              .classList.remove("hidden")
+          : document
+              .querySelector(".network-programmes")
+              .classList.add("hidden");
+      }
+    });
   },
 ]);
