@@ -1,30 +1,86 @@
+"use strict";
+
+const initreferrer = document.referrer;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+
+const otc = urlParams.get("otc");
+const ote = urlParams.get("ote");
+const pid = urlParams.get("pid");
+const programme = urlParams.get("programme");
+const progref = urlParams.get("progref");
+
+const target = document.querySelector(".course-chosen-info");
+
+if (initreferrer.indexOf("northtec.ac.nz") !== -1) {
+  document.getElementById("referrer").value = initreferrer;
+}
+
+const qualField = document.getElementById("Qualification");
+const locationField = document.getElementById("Location");
+const startField = document.getElementById("Start-Date");
+const oteField = document.getElementById("OteUid");
+const otcField = document.getElementById("OtcUid");
+const qualWrap = document.getElementById("qualification");
+const locationWrap = document.getElementById("location");
+const startWrap = document.getElementById("intakedates");
+const manualEntry = document.querySelector(
+  ".manual-checkbox > .js-form-control-section"
+);
+const manualEntryBtn = document.getElementById("ManualEntryBtn");
+
+const intake =
+  document.querySelector(`.intake-codes[data-otc="${otc}"]`) ||
+  document.querySelector(`.intake-codes[data-ote="${ote}"]`);
+
+manualEntryBtn.addEventListener("click", function () {
+  qualField.readOnly = false;
+  locationField.readOnly = false;
+  startField.readOnly = false;
+  document.getElementById("ManualEntry").click();
+  if (oteField) oteField.value = "99999999";
+  if (otcField) otcField.value = "99999999";
+  this.classList.add("hidden");
+});
+
+if (intake) {
+  target.innerHTML = intake.closest(".w-dyn-item").innerHTML;
+  qualField.value = intake.dataset.programmeName;
+  locationField.value = intake.dataset.location;
+  startField.value = intake.dataset.startDate;
+  qualField.readOnly = true;
+  locationField.readOnly = true;
+  startField.readOnly = true;
+  qualWrap.classList.remove("hidden");
+  locationWrap.classList.remove("hidden");
+  startWrap.classList.remove("hidden");
+  if (ote) oteField.value = ote;
+  if (otc) otcField.value = otc;
+  manualEntry.dataset.required = "false";
+} else if (programme) {
+  qualField.value = programme;
+  target.classList.add("hidden");
+  qualWrap.classList.remove("hidden");
+  locationWrap.classList.remove("hidden");
+  startWrap.classList.remove("hidden");
+  qualWrap.dataset.required = "true";
+  locationWrap.dataset.required = "true";
+  startWrap.dataset.required = "true";
+  manualEntryBtn.click();
+  //manualEntryBtn.classList.add("hidden");
+}
+
 function chosenQual() {
-  const initreferrer = document.referrer;
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-
-  const ote = urlParams.get("ote");
-  const pid = urlParams.get("pid");
-  const programme = urlParams.get("programme");
-  const progref = urlParams.get("progref");
-
-  let target = document.querySelector(".course-chosen-info");
-
-  if (initreferrer.indexOf("northtec.ac.nz") !== -1) {
-    document.getElementById("referrer").value = initreferrer;
-  }
-
-  if (ote) {
-    let prog = document.querySelectorAll(
-      '.intake-codes[data-ote="' + ote + '"]'
-    );
+  if (otc) {
+    let prog = document.querySelector('.intake-codes[data-otc="' + otc + '"]');
     let manchex = document.querySelector(
       ".manual-checkbox > .js-form-control-section"
     );
-    if (prog.length == 1) {
-      prog[0].closest(".w-dyn-item").classList.remove("hidden");
-      prog[0].closest(".w-dyn-item").classList.add("chosen-intake");
-      prog[0].closest(".prog-item").classList.add("chosen-programme");
+    if (prog) {
+      prog.closest(".w-dyn-item").classList.remove("hidden");
+      prog.closest(".w-embed").classList.remove("hidden");
+      prog.closest(".w-dyn-item").classList.add("chosen-intake");
+      prog.closest(".prog-item").classList.add("chosen-programme");
       document.getElementById("Qualification").value = document.querySelector(
         ".chosen-programme .prog-name"
       ).innerText;
@@ -35,7 +91,30 @@ function chosenQual() {
         ".chosen-programme .chosen-intake .app-start"
       ).innerText;
       document.getElementById("OteUid").value = ote;
-      target.innerHTML = prog[0].closest(".prog-item").innerHTML;
+      document.getElementById("OtcUid").value = otc;
+      target.innerHTML = prog.closest(".prog-item").innerHTML;
+      manchex.dataset.required = "false";
+    }
+  } else if (ote) {
+    let prog = document.querySelector('.intake-codes[data-ote="' + ote + '"]');
+    let manchex = document.querySelector(
+      ".manual-checkbox > .js-form-control-section"
+    );
+    if (prog.length == 1) {
+      prog.closest(".w-dyn-item").classList.remove("hidden");
+      prog.closest(".w-dyn-item").classList.add("chosen-intake");
+      prog.closest(".prog-item").classList.add("chosen-programme");
+      document.getElementById("Qualification").value = document.querySelector(
+        ".chosen-programme .prog-name"
+      ).innerText;
+      document.getElementById("Location").value = document.querySelector(
+        ".chosen-programme .chosen-intake .app-location"
+      ).innerText;
+      document.getElementById("Start-Date").value = document.querySelector(
+        ".chosen-programme .chosen-intake .app-start"
+      ).innerText;
+      document.getElementById("OteUid").value = ote;
+      target.innerHTML = prog.closest(".prog-item").innerHTML;
       manchex.dataset.required = "false";
     } else {
       var found = document.querySelector(
@@ -74,6 +153,7 @@ function chosenQual() {
       document.getElementById("Qualification").value = document.querySelector(
         ".chosen-programme .prog-name"
       ).innerText;
+      document.getElementById("course-chosen").classList.add("hidden");
       document.getElementById("ManualEntry").click();
     }
   } else if (programme) {
@@ -89,15 +169,6 @@ $(function () {
   $(".w-tab-link:nth-child(1)").addClass("w--current");
   $(".w-tab-pane:nth-child(1)").addClass("w--tab-active");
 
-  $("input#ManualEntry:checkbox").change(function () {
-    if ($(this).is(":checked")) {
-      $(this).prop("disabled", true);
-      $(this).closest("#course-chosen").addClass("hidden");
-      $(this).closest(".js-form-control-section");
-      document.getElementById("OteUid").value = "99999999";
-    }
-  });
-
   var prev = $(".previous-btn");
   var next = $(".next-btn");
 
@@ -107,15 +178,9 @@ $(function () {
   $(next).on("click", function () {
     $(".w-tab-link.w--current").next(".w-tab-link").trigger("click");
   });
-});
 
-window.fsAttributes = window.fsAttributes || [];
-window.fsAttributes.push([
-  "cmsload",
-  (listInstances) => {
-    chosenQual();
-  },
-]);
+  //chosenQual();
+});
 
 const inputChanged = function () {
   window.dataLayer = window.dataLayer || [];
