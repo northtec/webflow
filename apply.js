@@ -67,99 +67,6 @@ if (intake) {
   locationWrap.dataset.required = "true";
   startWrap.dataset.required = "true";
   manualEntryBtn.click();
-  //manualEntryBtn.classList.add("hidden");
-}
-
-function chosenQual() {
-  if (otc) {
-    let prog = document.querySelector('.intake-codes[data-otc="' + otc + '"]');
-    let manchex = document.querySelector(
-      ".manual-checkbox > .js-form-control-section"
-    );
-    if (prog) {
-      prog.closest(".w-dyn-item").classList.remove("hidden");
-      prog.closest(".w-embed").classList.remove("hidden");
-      prog.closest(".w-dyn-item").classList.add("chosen-intake");
-      prog.closest(".prog-item").classList.add("chosen-programme");
-      document.getElementById("Qualification").value = document.querySelector(
-        ".chosen-programme .prog-name"
-      ).innerText;
-      document.getElementById("Location").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-location"
-      ).innerText;
-      document.getElementById("Start-Date").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-start"
-      ).innerText;
-      document.getElementById("OteUid").value = ote;
-      document.getElementById("OtcUid").value = otc;
-      target.innerHTML = prog.closest(".prog-item").innerHTML;
-      manchex.dataset.required = "false";
-    }
-  } else if (ote) {
-    let prog = document.querySelector('.intake-codes[data-ote="' + ote + '"]');
-    let manchex = document.querySelector(
-      ".manual-checkbox > .js-form-control-section"
-    );
-    if (prog.length == 1) {
-      prog.closest(".w-dyn-item").classList.remove("hidden");
-      prog.closest(".w-dyn-item").classList.add("chosen-intake");
-      prog.closest(".prog-item").classList.add("chosen-programme");
-      document.getElementById("Qualification").value = document.querySelector(
-        ".chosen-programme .prog-name"
-      ).innerText;
-      document.getElementById("Location").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-location"
-      ).innerText;
-      document.getElementById("Start-Date").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-start"
-      ).innerText;
-      document.getElementById("OteUid").value = ote;
-      target.innerHTML = prog.closest(".prog-item").innerHTML;
-      manchex.dataset.required = "false";
-    } else {
-      var found = document.querySelector(
-        '.intake-codes[data-ote="' + ote + '"]'
-      );
-      for (var i = 0; i < prog.length; i++) {
-        const el = prog[i].closest(".prog-item");
-        if (el) {
-          const pro = el.querySelector(".prog-name").innerText;
-          if (pro == progref) {
-            found = el.querySelector(".intake-codes");
-            break;
-          }
-        }
-      }
-      found.closest(".w-dyn-item").classList.remove("hidden");
-      found.closest(".w-dyn-item").classList.add("chosen-intake");
-      found.closest(".prog-item").classList.add("chosen-programme");
-      document.getElementById("Qualification").value = document.querySelector(
-        ".chosen-programme .prog-name"
-      ).innerText;
-      document.getElementById("Location").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-location"
-      ).innerText;
-      document.getElementById("Start-Date").value = document.querySelector(
-        ".chosen-programme .chosen-intake .app-start"
-      ).innerText;
-      document.getElementById("OteUid").value = ote;
-      target.innerHTML = found.closest(".prog-item").innerHTML;
-      manchex.dataset.required = "false";
-    }
-  } else if (pid) {
-    let prog = document.querySelector('.prog-codes[data-pid="' + pid + '"]');
-    if (prog) {
-      prog.closest(".prog-item").classList.add("chosen-programme");
-      document.getElementById("Qualification").value = document.querySelector(
-        ".chosen-programme .prog-name"
-      ).innerText;
-      document.getElementById("course-chosen").classList.add("hidden");
-      document.getElementById("ManualEntry").click();
-    }
-  } else if (programme) {
-    document.getElementById("Qualification").value = programme;
-    document.getElementById("ManualEntry").click();
-  }
 }
 
 $(function () {
@@ -178,8 +85,6 @@ $(function () {
   $(next).on("click", function () {
     $(".w-tab-link.w--current").next(".w-tab-link").trigger("click");
   });
-
-  //chosenQual();
 });
 
 const inputChanged = function () {
