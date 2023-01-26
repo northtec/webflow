@@ -60,6 +60,34 @@ if (metaStart === "Rolling Intake" && intakeText.length > 0) {
   }
 }
 
+//Date Range formatting
+const dateFormat = new Intl.DateTimeFormat("en-nz", { dateStyle: "long" });
+const dateFormatFull = new Intl.DateTimeFormat("en-nz", { dateStyle: "full" });
+
+const intakeDates = document.querySelectorAll(
+  ".intake-collection .intake-date"
+);
+intakeDates.forEach(function (intake) {
+  const startDate = intake.querySelector(".intake-start-date");
+  const endDate = intake.querySelector(".intake-end-date");
+  const start =
+    isDate(startDate?.textContent) && new Date(startDate?.textContent);
+  const end = isDate(endDate?.textContent) && new Date(endDate?.textContent);
+  const range =
+    start.getTime() === end.getTime()
+      ? dateFormatFull.formatRange(start, end)
+      : dateFormat.formatRange(start, end);
+  if (range) {
+    intake.insertAdjacentHTML(
+      "beforeend",
+      `<div class="intake-text intake-range">${range}</div>`
+    );
+    startDate.classList.add("hidden");
+    endDate.classList.add("hidden");
+    intake.querySelector(".seperator").classList.add("hidden");
+  }
+});
+
 /**
  * Intersectional Observer for the anchor navigation.
  */
