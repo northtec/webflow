@@ -45,7 +45,7 @@ manualEntryBtn.addEventListener("click", function () {
 
 if (intake) {
   target.innerHTML = intake.closest(".w-dyn-item").innerHTML;
-  qualField.value = intake.dataset.programmeName;
+  qualField.value = intake.innerText;
   locationField.value = intake.dataset.location;
   startField.value = intake.dataset.startDate;
   qualField.readOnly = true;
