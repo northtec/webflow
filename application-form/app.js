@@ -91,12 +91,17 @@ const addPrevNextListeners = function () {
 };
 
 const manualClick = function () {
+  const oteField = document.getElementById('OteUid');
+  const otcField = document.getElementById('OtcUid');
+
   document.getElementById('ManualEntry').click();
   document.getElementById('ManualEntryBtn').classList.add('hidden');
   document.querySelector('.course-chosen-info').classList.add('hidden');
   document
     .querySelectorAll('#manual-entry .w-input')
     .forEach(el => (el.readOnly = false));
+  if (oteField) oteField.value = '99999999';
+  if (otcField) otcField.value = '99999999';
 };
 
 const addManualEntryBtnEventListener = function () {
