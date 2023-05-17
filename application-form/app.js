@@ -111,7 +111,7 @@ const addManualEntryBtnEventListener = function () {
 };
 
 const init = function () {
-  setReferrer();
+  //setReferrer();
   addFormStartedListener();
   addManualEntryBtnEventListener();
   resetToFirstTab();
