@@ -1,18 +1,18 @@
-"use strict";
+'use strict';
 
 function loadintakes() {
-  const courseCollection = document.querySelectorAll(".course-collection");
+  const courseCollection = document.querySelectorAll('.course-collection');
 
   const isDate = (date) => {
-    return new Date(date) !== "Invalid Date" && !isNaN(new Date(date));
+    return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
   };
 
   function nextRollingDate(intakeDates) {
     let date = intakeDates;
-    const arr = intakeDates.split(", ");
+    const arr = intakeDates.split(', ');
     let datesArray = arr.map((dateString) => new Date(dateString));
 
-    if (datesArray != "Invalid Date") {
+    if (datesArray != 'Invalid Date') {
       const now = Date.now();
       const futureDates = datesArray.filter((date) => {
         // Filter out dates in the past or falsey values
@@ -27,19 +27,19 @@ function loadintakes() {
 
   for (let i = 0; i < courseCollection.length; i++) {
     const intake = courseCollection[i].querySelector(
-      ".next-intake:not(.w-condition-invisible)"
+      '.next-intake:not(.w-condition-invisible)'
     );
     const intakerolling = courseCollection[i].querySelector(
-      ".next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)"
+      '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
     );
     const intakelocation = courseCollection[i].querySelector(
-      ".next-intake-location:not(.w-condition-invisible)"
+      '.next-intake-location:not(.w-condition-invisible)'
     );
     const nointake = courseCollection[i].querySelector(
-      ".no-intake-set div:not(.w-condition-invisible):not(.w-dyn-bind-empty)"
+      '.no-intake-set div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
     );
     const datenode = courseCollection[i].querySelector(
-      ".card-bottom > .next-intake-text"
+      '.card-bottom > .next-intake-text'
     );
     let date = datenode.textContent;
 
@@ -47,30 +47,30 @@ function loadintakes() {
       date = intake.textContent;
       if (isDate(date)) {
         const intakeDate = new Date(date);
-        const intakeDateString = intakeDate.toLocaleDateString("en-nz", {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
+        const intakeDateString = intakeDate.toLocaleDateString('en-nz', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
         });
         date = intakeDateString;
       }
 
       if (intakerolling) {
         const rollingIntakes = courseCollection[i].querySelectorAll(
-          ".next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)"
+          '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
         );
         let dates = intakerolling.textContent;
         for (let i = 1; i < rollingIntakes.length; i++) {
-          dates = dates + ", " + rollingIntakes[i].textContent;
+          dates = dates + ', ' + rollingIntakes[i].textContent;
         }
         const nextDateRolling = nextRollingDate(dates);
         if (nextDateRolling) {
           const nextDateRollingString = nextDateRolling.toLocaleDateString(
-            "en-nz",
+            'en-nz',
             {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
             }
           );
           if (isDate(date)) {
@@ -85,23 +85,27 @@ function loadintakes() {
       }
     } else if (intakerolling) {
       const rollingIntakes = courseCollection[i].querySelectorAll(
-        ".next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)"
+        '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
       );
       let dates = intakerolling.textContent;
       for (let i = 1; i < rollingIntakes.length; i++) {
-        dates = dates + ", " + rollingIntakes[i].textContent;
+        dates = dates + ', ' + rollingIntakes[i].textContent;
       }
       const nextDateRolling = nextRollingDate(dates);
       if (nextDateRolling) {
         const nextDateRollingString = nextDateRolling.toLocaleDateString(
-          "en-nz",
+          'en-nz',
           {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
           }
         );
         date = nextDateRollingString;
+      } else {
+        date = courseCollection[i].querySelector(
+          '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
+        )?.textContent;
       }
     } else if (intakelocation) {
       date = intakelocation.textContent;
@@ -114,15 +118,15 @@ function loadintakes() {
 }
 function normaliseAccents() {
   const regex = /([a-zA-Z]*[\u00c1-\u036f]+[a-zA-Z]*)/gi;
-  const nodeList = document.querySelectorAll(".course-collection");
+  const nodeList = document.querySelectorAll('.course-collection');
   for (let i = 0, j = nodeList.length; i < j; i++) {
     let textContent = nodeList[i].innerText;
     let accented = textContent.match(regex);
     if (accented) {
       let result = accented
-        .join(" ")
-        .normalize("NFD")
-        .replace(/[\u00c1-\u036f]/g, "");
+        .join(' ')
+        .normalize('NFD')
+        .replace(/[\u00c1-\u036f]/g, '');
       nodeList[i].querySelector('[fs-cmsfilter-field="accents"]').innerText =
         result;
     }
@@ -130,31 +134,31 @@ function normaliseAccents() {
 }
 window.fsAttributes = window.fsAttributes || [];
 window.fsAttributes.push([
-  "cmsload",
+  'cmsload',
   (listInstances) => {
     loadintakes();
     normaliseAccents();
     // scripts to execute in order
     let scripts = [
-      "https://cdn.jsdelivr.net/npm/@finsweet/attributes-richtext@1/richtext.js",
-      "https://cdn.jsdelivr.net/npm/@finsweet/attributes-cmsfilter@1/cmsfilter.js",
+      'https://cdn.jsdelivr.net/npm/@finsweet/attributes-richtext@1/richtext.js',
+      'https://cdn.jsdelivr.net/npm/@finsweet/attributes-cmsfilter@1/cmsfilter.js',
     ];
 
     scripts.forEach(function (url) {
-      let script = document.createElement("script");
+      let script = document.createElement('script');
       script.src = url;
       script.async = false;
       document.body.appendChild(script);
     });
 
     const [listInstance] = listInstances;
-    listInstance.on("renderitems", (renderedItems) => {
+    listInstance.on('renderitems', (renderedItems) => {
       if (window.fsAttributes.cmsfilter) {
         const urlParams = new URLSearchParams(window.location.search);
-        const area = urlParams.get("area");
-        const term = urlParams.get("*");
+        const area = urlParams.get('area');
+        const term = urlParams.get('*');
         const networkProgrammes = document.querySelectorAll(
-          ".network-programmes .w-dyn-item"
+          '.network-programmes .w-dyn-item'
         );
         let results = 0;
         for (let i = 0; i < networkProgrammes.length; i++) {
@@ -166,19 +170,19 @@ window.fsAttributes.push([
             networkArea.textContent === area ||
             networkText.includes(term?.toLowerCase())
           ) {
-            networkProgrammes[i].classList.remove("hidden");
+            networkProgrammes[i].classList.remove('hidden');
             results++;
           } else {
-            networkProgrammes[i].classList.add("hidden");
+            networkProgrammes[i].classList.add('hidden');
           }
         }
         results
           ? document
-              .querySelector(".network-programmes")
-              .classList.remove("hidden")
+              .querySelector('.network-programmes')
+              .classList.remove('hidden')
           : document
-              .querySelector(".network-programmes")
-              .classList.add("hidden");
+              .querySelector('.network-programmes')
+              .classList.add('hidden');
       }
     });
   },
