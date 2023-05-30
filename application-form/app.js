@@ -64,6 +64,7 @@ const inputChanged = function () {
 
 const checkemail = function (e) {
   email = e.target.value;
+  e.target.closest('.form-control')?.querySelector('.warning')?.remove();
   if (!email) return;
 
   const suggestedEmail = emailSpellChecker.run({
