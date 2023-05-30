@@ -1,5 +1,6 @@
 'use strict';
 import 'core-js/stable';
+import emailSpellChecker from '@zootools/email-spell-checker';
 
 const setReferrer = function () {
   const referrer = document.referrer;
@@ -61,11 +62,36 @@ const inputChanged = function () {
   });
 };
 
+const checkemail = function (e) {
+  email = e.target.value;
+  if (!email) return;
+
+  const suggestedEmail = emailSpellChecker.run({
+    email,
+    domains: [...emailSpellChecker.POPULAR_DOMAINS, 'northtec.ac.nz'],
+    //secondLevelDomains: ['yahoo', 'hotmail', 'mail', 'live', 'outlook'],
+    topLevelDomains: [...emailSpellChecker.POPULAR_TLDS, 'ac.nz'],
+  });
+  if (!suggestedEmail) return;
+  // console.log('suggestedEmail', suggestedEmail);
+
+  const markup = `
+  <label class="warning">
+  Did you mean <a href="#" class="replaceEmail" data-email="${suggestedEmail.full}">${suggestedEmail.full}</a>?
+  </label>
+
+  `;
+
+  e.target.closest('.form-control').insertAdjacentHTML('beforeend', markup);
+};
+
 const addFormStartedListener = function () {
   const emailField = document.querySelector(
     '.form-control-wrapper input[data-name="Email"]'
   );
   emailField.addEventListener('change', inputChanged, { once: true });
+  emailField.addEventListener('change', checkemail);
+  emailField.closest('.form-control').addEventListener('click', replaceEmail);
 };
 
 const resetToFirstTab = function () {
@@ -108,6 +134,15 @@ const addManualEntryBtnEventListener = function () {
   document
     .getElementById('ManualEntryBtn')
     .addEventListener('click', manualClick);
+};
+
+const replaceEmail = function (e) {
+  const el = e.target;
+  if (!el.classList.contains('replaceEmail')) return;
+  e.preventDefault();
+  el.closest('.form-control').querySelector('input[data-name="Email"]').value =
+    el.dataset.email;
+  el.closest('.warning').remove();
 };
 
 const init = function () {
