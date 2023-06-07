@@ -16,6 +16,7 @@ const prefillFormFromURL = function () {
   const urlParams = new URLSearchParams(queryString);
   const otc = urlParams.get('otc');
   const ote = urlParams.get('ote');
+  const eid = urlParams.get('eid');
   const programme = urlParams.get('programme');
 
   const target = document.querySelector('.course-chosen-info');
@@ -32,7 +33,13 @@ const prefillFormFromURL = function () {
   );
 
   const intake =
+    document.querySelector(
+      `.intake-codes[data-otc="${otc}"][data-pid="${eid}"]`
+    ) ||
     document.querySelector(`.intake-codes[data-otc="${otc}"]`) ||
+    document.querySelector(
+      `.intake-codes[data-ote="${ote}"][data-pid="${eid}"]`
+    ) ||
     document.querySelector(`.intake-codes[data-ote="${ote}"]`);
 
   if (intake) {
