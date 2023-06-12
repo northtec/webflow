@@ -8,6 +8,24 @@ const setReferrer = function () {
   document.getElementById('referrer').value = referrer;
 };
 
+const setStudyPreference = function (studytype) {
+  if (!studytype) return;
+  const inputFullTime = document.getElementById('Full-time');
+  const inputPartTime = document.getElementById('Part-time');
+  const descriptorField = document.querySelector(
+    '#studyPreference .descriptor'
+  );
+
+  if (studytype === 'Full Time') {
+    inputFullTime.click();
+    descriptorField.textContent = 'Note: This course may be full-time only.';
+  }
+  if (studytype === 'Part Time') {
+    inputPartTime.click();
+    descriptorField.textContent = 'Note: This course may be part-time only.';
+  }
+};
+
 const prefillFormFromURL = function () {
   // Get URL Parameters
   const queryString = window.location.search;
@@ -17,6 +35,7 @@ const prefillFormFromURL = function () {
   const otc = urlParams.get('otc');
   const ote = urlParams.get('ote');
   const eid = urlParams.get('eid');
+  const studytype = urlParams.get('studytype');
   const programme = urlParams.get('programme');
 
   const target = document.querySelector('.course-chosen-info');
@@ -50,6 +69,15 @@ const prefillFormFromURL = function () {
     qualField.readOnly = true;
     locationField.readOnly = true;
     startField.readOnly = true;
+    const intakeName = intake.innerText.toLowerCase();
+    if (intakeName.includes('part time') || intakeName.includes('part-time'))
+      setStudyPreference('Part Time');
+    else if (
+      intakeName.includes('full time') ||
+      intakeName.includes('full-time')
+    )
+      setStudyPreference('Full Time');
+    else setStudyPreference(intake.dataset.options);
     qualWrap.classList.remove('hidden');
     locationWrap.classList.remove('hidden');
     startWrap.classList.remove('hidden');
@@ -59,6 +87,7 @@ const prefillFormFromURL = function () {
   } else if (programme) {
     manualClick();
     qualField.value = programme;
+    setStudyPreference(studytype);
   }
 };
 
