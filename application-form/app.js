@@ -105,9 +105,14 @@ const checkemail = function (e) {
 
   const suggestedEmail = emailSpellChecker.run({
     email,
-    domains: [...emailSpellChecker.POPULAR_DOMAINS, 'northtec.ac.nz'],
+    domains: [
+      ...emailSpellChecker.POPULAR_DOMAINS,
+      'northtec.ac.nz',
+      'justice.govt.nz',
+      'education.govt.nz',
+    ],
     //secondLevelDomains: ['yahoo', 'hotmail', 'mail', 'live', 'outlook'],
-    topLevelDomains: [...emailSpellChecker.POPULAR_TLDS, 'ac.nz'],
+    topLevelDomains: [...emailSpellChecker.POPULAR_TLDS, 'ac.nz', 'govt.nz'],
   });
   if (!suggestedEmail) return;
   // console.log('suggestedEmail', suggestedEmail);
