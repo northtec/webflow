@@ -64,7 +64,8 @@ const prefillFormFromURL = function () {
   if (intake) {
     target.innerHTML = intake.closest('.w-dyn-item').innerHTML;
     qualField.value = intake.innerText;
-    locationField.value = intake.dataset.location;
+    locationField.value =
+      intake.dataset.locationCustom || intake.dataset.location;
     startField.value = intake.dataset.startDate || 'Next Intake';
     qualField.readOnly = true;
     locationField.readOnly = true;
