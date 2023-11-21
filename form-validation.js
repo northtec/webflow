@@ -49,6 +49,7 @@ function validateFields() {
   $.each($currFields, function () {
     var $this = $(this);
     var required = $this.attr('data-required');
+    const parentHidden = $this.closest('.js-form-control-section.hidden');
     var msg = $this.data('error-msg');
     var maxLength = parseInt($this.attr('data-max-length'));
     var maxLengthErrorMessage = $this.data('data-max-length-error-msg');
@@ -64,6 +65,9 @@ function validateFields() {
       });
     $this.find('label.error').remove();
     if (required == 'true') {
+      if (parentHidden.length) {
+        return; // Don't validate fields within hidden control elements
+      }
       if (input.is(':radio') || input.is(':checkbox')) {
         if (input.is(':checked')) {
           valid.push(true);
