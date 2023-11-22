@@ -178,24 +178,26 @@ function initFieldDependency() {
                 if (required == 'depends') {
                   $(o).attr('data-required', 'true');
                 }
+              } else if (
+                wildcards.length &&
+                wildcards.some((val) => str.includes(val))
+              ) {
+                $(o)
+                  .removeClass('hidden')
+                  .find(':input')
+                  .prop('disabled', false);
+                if (required == 'depends') {
+                  $(o).attr('data-required', 'true');
+                }
               } else {
-                $(o).addClass('hidden').find(':input').prop('disabled', true);
+                $(o)
+                  .addClass('hidden')
+                  .find(':input')
+                  .prop('disabled', true)
+                  .val('');
                 if (required != 'false') {
                   $(o).attr('data-required', 'depends');
                 }
-              }
-              if (wildcards.length) {
-                wildcards.forEach((val) => {
-                  if (str.includes(val)) {
-                    $(o)
-                      .removeClass('hidden')
-                      .find(':input')
-                      .prop('disabled', false);
-                    if (required == 'depends') {
-                      $(o).attr('data-required', 'true');
-                    }
-                  }
-                });
               }
             } else if (dependencyValue == 'null') {
               if ($value.length == 0) {
@@ -259,7 +261,11 @@ function initFieldDependency() {
                   $(o).attr('data-required', 'true');
                 }
               } else {
-                $(o).addClass('hidden').find(':input').prop('disabled', true);
+                $(o)
+                  .addClass('hidden')
+                  .find(':input')
+                  .prop('disabled', true)
+                  .val('');
                 if (required != 'false') {
                   $(o).attr('data-required', 'depends');
                 }
