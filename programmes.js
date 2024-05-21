@@ -12,34 +12,35 @@ for (let i = 0, j = locations.length; i < j; i++) {
 
 //Rolling Intakes - Change format and filter old dates
 const isDate = (date) => {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  const regex2 =
+    /(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),\s+(\d{4})/;
+  if (!regex.test(date) && !regex2.test(date)) return false;
   return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
 };
 
 let dates = document.querySelectorAll('.js-rolling-dates');
+const now = Date.now();
+
 for (let i = 0, len = dates.length; i < len; i++) {
   let date = dates[i].innerHTML;
   const arr = date.split(', ');
-  let datesArray = arr.map((dateString) => new Date(dateString));
-  if (datesArray != 'Invalid Date') {
-    const now = Date.now();
-    const futureDates = datesArray.filter((date) => {
-      // Filter out dates in the past or falsey values
-      return date && date > now;
+  let datesArray = arr.map((dateString) => {
+    if (!isDate(dateString)) return dateString;
+    const validDate = new Date(dateString);
+    if (validDate < now) return;
+    return validDate.toLocaleDateString('en-nz', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     });
-    const formatted = futureDates.map((date) =>
-      date.toLocaleDateString('en-nz', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    );
-    const FutureDateString = formatted.join(', ');
+  });
+  const formattedDateString = datesArray.join(', ');
 
-    if (FutureDateString) {
-      dates[i].innerHTML = FutureDateString;
-    } else {
-      dates[i].textContent = 'TBC';
-    }
+  if (formattedDateString) {
+    dates[i].innerHTML = formattedDateString;
+  } else {
+    dates[i].textContent = 'TBC';
   }
 }
 
