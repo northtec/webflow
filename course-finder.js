@@ -14,22 +14,16 @@ function loadintakes() {
 
   function nextRollingDate(intakeDates) {
     const arr = intakeDates.split(', ');
-    let datesArray = arr.map((dateString) => {
-      if (!isDate(dateString)) return dateString;
-      const validDate = new Date(dateString);
-      if (validDate < now) return;
-      return validDate.toLocaleDateString('en-nz', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      });
+    if (!isDate(arr[0])) return arr[0];
+
+    const nextDate = arr.map((acc) => new Date(acc)).sort((a, b) => a - b);
+
+    const formattedDate = nextDate[0].toLocaleDateString('en-nz', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     });
-    console.log(datesArray);
-    const nextDate = datesArray[0];
-    if (nextDate) {
-      console.log(nextDate);
-      return nextDate;
-    }
+    return formattedDate;
   }
 
   for (let i = 0; i < courseCollection.length; i++) {
@@ -73,7 +67,6 @@ function loadintakes() {
         const nextDateRolling = nextRollingDate(dates);
         if (nextDateRolling) {
           if (isDate(date)) {
-            console.log(date);
             const nextDate = new Date(date);
             if (nextDate > nextDateRolling) {
               date = nextDateRolling;
