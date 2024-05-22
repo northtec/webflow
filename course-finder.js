@@ -2,26 +2,33 @@
 
 function loadintakes() {
   const courseCollection = document.querySelectorAll('.course-collection');
-
+  const now = Date.now();
+  //Rolling Intakes - Change format and filter old dates
   const isDate = (date) => {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    const regex2 =
+      /(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),\s+(\d{4})/;
+    if (!regex.test(date) && !regex2.test(date)) return false;
     return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
   };
 
   function nextRollingDate(intakeDates) {
-    let date = intakeDates;
     const arr = intakeDates.split(', ');
-    let datesArray = arr.map((dateString) => new Date(dateString));
-
-    if (datesArray != 'Invalid Date') {
-      const now = Date.now();
-      const futureDates = datesArray.filter((date) => {
-        // Filter out dates in the past or falsey values
-        return date && date > now;
+    let datesArray = arr.map((dateString) => {
+      if (!isDate(dateString)) return dateString;
+      const validDate = new Date(dateString);
+      if (validDate < now) return;
+      return validDate.toLocaleDateString('en-nz', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
       });
-      const nextDate = futureDates[0];
-      if (nextDate) {
-        return nextDate;
-      }
+    });
+    console.log(datesArray);
+    const nextDate = datesArray[0];
+    if (nextDate) {
+      console.log(nextDate);
+      return nextDate;
     }
   }
 
@@ -65,21 +72,14 @@ function loadintakes() {
         }
         const nextDateRolling = nextRollingDate(dates);
         if (nextDateRolling) {
-          const nextDateRollingString = nextDateRolling.toLocaleDateString(
-            'en-nz',
-            {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            }
-          );
           if (isDate(date)) {
+            console.log(date);
             const nextDate = new Date(date);
             if (nextDate > nextDateRolling) {
-              date = nextDateRollingString;
+              date = nextDateRolling;
             }
           } else {
-            date = nextDateRollingString;
+            date = nextDateRolling;
           }
         }
       }
@@ -93,15 +93,7 @@ function loadintakes() {
       }
       const nextDateRolling = nextRollingDate(dates);
       if (nextDateRolling) {
-        const nextDateRollingString = nextDateRolling.toLocaleDateString(
-          'en-nz',
-          {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-          }
-        );
-        date = nextDateRollingString;
+        date = nextDateRolling;
       } else {
         date = courseCollection[i].querySelector(
           '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
