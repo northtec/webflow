@@ -8,6 +8,39 @@ const setReferrer = function () {
   document.getElementById('referrer').value = referrer;
 };
 
+const isDate = date => {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  const regex2 =
+    /(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+(\d{1,2}),\s+(\d{4})/;
+  if (!regex.test(date) && !regex2.test(date)) return false;
+  return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
+};
+
+const nextRollingDate = function (date) {
+  if (!date) return false;
+  const arr = date.split(', ');
+  if (!isDate(arr[0])) return false;
+  const now = Date.now();
+
+  let datesArray = arr.map(date => {
+    if (!isDate(date)) return;
+    const validDate = new Date(date);
+    if (validDate < now) return;
+    return validDate;
+  });
+
+  if (!datesArray) return false;
+
+  const sorterdDate = arr.map(acc => new Date(acc)).sort((a, b) => a - b);
+
+  const formattedDate = sorterdDate[0].toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+  return formattedDate;
+};
+
 const setStudyPreference = function (studytype) {
   if (!studytype) return;
   const inputFullTime = document.getElementById('Full-time');
@@ -66,7 +99,10 @@ const prefillFormFromURL = function () {
     qualField.value = intake.innerText;
     locationField.value =
       intake.dataset.locationCustom || intake.dataset.location;
-    startField.value = intake.dataset.startDate || 'Next Intake';
+    startField.value =
+      nextRollingDate(intake.dataset.rollingDescription) ||
+      intake.dataset.startDate ||
+      'Next Intake';
     qualField.readOnly = true;
     locationField.readOnly = true;
     startField.readOnly = true;
