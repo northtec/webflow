@@ -36,6 +36,7 @@
 
 .heading-jumbo-medium {
   font-size: 3rem;
+  line-height: 3.5rem;
 }
 
 .lower-footer {
@@ -43,6 +44,9 @@
 }
 .govt-right {
   text-align: center;
+}
+.duration {
+  margin-top: 1.5rem;
 }
 
 h1,
