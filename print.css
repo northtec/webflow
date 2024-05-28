@@ -1,0 +1,65 @@
+.navigation,
+.course-nav-section,
+.kis,
+.about-te-pukenga,
+.cc-cta,
+.w-richtext-figure-type-video,
+.applynow_btn,
+.about-te-pukenga,
+.div-block-58,
+.social-icons,
+.footer-links-center,
+.tp-links,
+.tepukenga-upper-info,
+.footer-tp,
+.govt-logo,
+.breadcrumbs,
+.div-block-48 {
+  display: none !important;
+}
+
+.course-banner,
+.section.footer {
+  background: none;
+  color: black;
+  min-height: 0;
+}
+
+.tag-location,
+.phone-link {
+  color: black;
+}
+
+.course-banner-container {
+  padding: 0;
+}
+
+.heading-jumbo-medium {
+  font-size: 3rem;
+}
+
+.lower-footer {
+  display: block;
+}
+.govt-right {
+  text-align: center;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  page-break-after: avoid;
+}
+
+.print-header {
+  display: block;
+  text-align: center;
+}
+
+.print-logo {
+  max-height: 175px;
+  display: inline-block;
+}
