@@ -1,3 +1,12 @@
+html {
+  font-size: 0.7em;
+}
+
+body {
+  font-size: 1rem;
+  line-height: 1.75rem;
+}
+
 .navigation,
 .course-nav-section,
 .kis,
@@ -34,6 +43,7 @@
   padding: 0;
 }
 
+h1,
 .heading-jumbo-medium {
   font-size: 3rem;
   line-height: 3.5rem;
@@ -60,10 +70,4 @@ h6 {
 
 .print-header {
   display: block;
-  text-align: center;
-}
-
-.print-logo {
-  max-height: 175px;
-  display: inline-block;
 }
