@@ -20,42 +20,21 @@ function nextIntake() {
     return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
   };
 
-  function nextRollingDate(intakeDates) {
+  function nextDate(intakeDates) {
     const arr = intakeDates.split(', ');
     if (!isDate(arr[0])) return arr[0];
 
-    const nextDate = arr
+    const dates = arr
       .map((acc) => new Date(acc))
       .filter((date) => date > now)
       .sort((a, b) => a - b);
 
-    const formattedDate = nextDate[0].toLocaleDateString('en-nz', {
+    const formattedDate = dates[0].toLocaleDateString('en-nz', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
     });
     return formattedDate;
-  }
-
-  function setRollingText(date) {
-    const rollingIntakes = courseCollection[i].querySelectorAll(
-      '.next-intake-rolling:not(.w-condition-invisible) div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
-    );
-    let dates = intakerolling.textContent;
-    for (let i = 1; i < rollingIntakes.length; i++) {
-      dates = dates + ', ' + rollingIntakes[i].textContent;
-    }
-    const nextDateRolling = nextRollingDate(dates);
-    if (nextDateRolling) {
-      if (isDate(date)) {
-        const nextDate = new Date(date);
-        if (nextDate > nextDateRolling) {
-          return nextDateRolling;
-        }
-      } else {
-        return nextDateRolling;
-      }
-    }
   }
 
   const courseCollection = document.querySelectorAll('.course-collection');
@@ -73,16 +52,19 @@ function nextIntake() {
         (roll) => roll.textContent
       ).join(', ');
 
-      dateContainer.textContent = nextRollingDate(intakes);
+      dateContainer.textContent = nextDate(intakes);
       return;
     }
 
-    const intake = course.querySelector(
+    const intake = course.querySelectorAll(
       '.next-intake:not(.w-condition-invisible)'
     );
-    if (intake) {
-      const date = intake.textContent;
-      dateContainer.textContent = isDate(date) ? formatDate(date) : date;
+    if (intake.length) {
+      const dates = Array.from(intake, (intake) => intake.textContent);
+      const formattedDates = dates.map((date) => formatDate(date)).join(', ');
+
+      dateContainer.textContent = nextDate(formattedDates);
+      return;
     }
 
     const intakelocation = course.querySelector(
