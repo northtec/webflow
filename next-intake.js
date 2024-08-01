@@ -29,7 +29,7 @@ function nextIntake() {
       .filter((date) => date > now)
       .sort((a, b) => a - b);
 
-    const formattedDate = dates[0].toLocaleDateString('en-nz', {
+    const formattedDate = dates[0]?.toLocaleDateString('en-nz', {
       day: 'numeric',
       month: 'long',
       year: 'numeric',
