@@ -5,10 +5,17 @@ const locations = document.querySelectorAll(
   '.collection-locations .location-item'
 );
 
+const locationSet = new Set();
+
 for (let i = 0, j = locations.length; i < j; i++) {
   const value = locations[i].innerText;
-  locations[i].setAttribute('data-attr-item', value);
+  if (value && !locationSet.has(value)) {
+    locationSet.add(value);
+    locations[i].setAttribute('data-attr-item', value);
+    console.log(locations[i]);
+  } else locations[i].remove();
 }
+document.querySelector('.location').style.opacity = 1;
 
 //Rolling Intakes - Change format and filter old dates
 const isDate = (date) => {
