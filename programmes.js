@@ -12,7 +12,6 @@ for (let i = 0, j = locations.length; i < j; i++) {
   if (value && !locationSet.has(value)) {
     locationSet.add(value);
     locations[i].setAttribute('data-attr-item', value);
-    console.log(locations[i]);
   } else locations[i].remove();
 }
 document.querySelector('.location').style.opacity = 1;
