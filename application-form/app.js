@@ -1,6 +1,5 @@
 'use strict';
 import 'core-js/stable';
-import emailSpellChecker from '@zootools/email-spell-checker';
 
 const setReferrer = function () {
   const referrer = document.referrer;
@@ -16,30 +15,23 @@ const isDate = date => {
   return new Date(date) !== 'Invalid Date' && !isNaN(new Date(date));
 };
 
-const nextRollingDate = function (date) {
-  if (!date) return false;
-  const arr = date.split(', ');
-  if (!isDate(arr[0])) return false;
+function nextDate(intakeDates) {
   const now = Date.now();
+  const arr = intakeDates.split(', ');
+  if (!isDate(arr[0])) return false;
 
-  let datesArray = arr.map(date => {
-    if (!isDate(date)) return;
-    const validDate = new Date(date);
-    if (validDate < now) return;
-    return validDate;
-  });
+  const dates = arr
+    .map(acc => new Date(acc))
+    .filter(date => date > now)
+    .sort((a, b) => a - b);
 
-  if (!datesArray) return false;
-
-  const sorterdDate = arr.map(acc => new Date(acc)).sort((a, b) => a - b);
-
-  const formattedDate = sorterdDate[0].toLocaleDateString('en-US', {
+  const formattedDate = dates[0]?.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   });
   return formattedDate;
-};
+}
 
 const setStudyPreference = function (studytype) {
   if (!studytype) return;
@@ -100,7 +92,7 @@ const prefillFormFromURL = function () {
     locationField.value =
       intake.dataset.locationCustom || intake.dataset.location;
     startField.value =
-      nextRollingDate(intake.dataset.rollingDescription) ||
+      nextDate(intake.dataset.rollingDescription) ||
       intake.dataset.startDate ||
       'Next Intake';
     qualField.readOnly = true;
@@ -135,42 +127,11 @@ const inputChanged = function () {
   });
 };
 
-const checkemail = function (e) {
-  email = e.target.value;
-  e.target.closest('.form-control')?.querySelector('.warning')?.remove();
-  if (!email) return;
-
-  const suggestedEmail = emailSpellChecker.run({
-    email,
-    domains: [
-      ...emailSpellChecker.POPULAR_DOMAINS,
-      'northtec.ac.nz',
-      'justice.govt.nz',
-      'education.govt.nz',
-    ],
-    //secondLevelDomains: ['yahoo', 'hotmail', 'mail', 'live', 'outlook'],
-    topLevelDomains: [...emailSpellChecker.POPULAR_TLDS, 'ac.nz', 'govt.nz'],
-  });
-  if (!suggestedEmail) return;
-  // console.log('suggestedEmail', suggestedEmail);
-
-  const markup = `
-  <label class="warning">
-  Did you mean <a href="#" class="replaceEmail" data-email="${suggestedEmail.full}">${suggestedEmail.full}</a>?
-  </label>
-
-  `;
-
-  e.target.closest('.form-control').insertAdjacentHTML('beforeend', markup);
-};
-
 const addFormStartedListener = function () {
   const emailField = document.querySelector(
     '.form-control-wrapper input[data-name="Email"]'
   );
   emailField.addEventListener('change', inputChanged, { once: true });
-  emailField.addEventListener('change', checkemail);
-  emailField.closest('.form-control').addEventListener('click', replaceEmail);
 };
 
 const resetToFirstTab = function () {
