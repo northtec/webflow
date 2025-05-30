@@ -12,6 +12,11 @@ function nextIntake() {
     return intakeDateString;
   };
 
+  const isValidDate = function (dateStr) {
+    const date = new Date(dateStr);
+    return !isNaN(date.getTime());
+  };
+
   const isDate = (date) => {
     const regex = /^\d{4}-\d{2}-\d{2}$/;
     const regex2 =
@@ -21,8 +26,11 @@ function nextIntake() {
   };
 
   function nextDate(intakeDates) {
-    const arr = intakeDates.split(', ');
-    if (!isDate(arr[0])) return arr[0];
+    const arr = intakeDates.split(',').map((d) => d.trim());
+    if (!arr.every(isValidDate)) {
+      if (arr.includes('Monthly Intakes')) return 'Monthly Intakes';
+      return arr[0];
+    }
 
     const dates = arr
       .map((acc) => new Date(acc))
