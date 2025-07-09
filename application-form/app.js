@@ -33,6 +33,13 @@ function nextDate(intakeDates) {
   return formattedDate;
 }
 
+const setFormSource = function () {
+  const sourceInput = document.getElementById('formSource');
+  if (sourceInput) {
+    sourceInput.value = window.location.hostname;
+  }
+};
+
 const setStudyPreference = function (studytype) {
   if (!studytype) return;
   const inputFullTime = document.getElementById('Full-time');
@@ -192,6 +199,7 @@ const init = function () {
   resetToFirstTab();
   addPrevNextListeners();
   prefillFormFromURL();
+  setFormSource();
 };
 
 init();
