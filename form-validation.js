@@ -1,3 +1,10 @@
+const setFormSource = function () {
+  const sourceInput = document.getElementById('formSource');
+  if (sourceInput) {
+    sourceInput.value = window.location.hostname;
+  }
+};
+
 const form = document.querySelector('.form-control-wrapper').closest('form');
 
 if (form.length > 0) {
@@ -28,6 +35,7 @@ if (form.length > 0) {
 
   initFields();
   initFieldDependency();
+  setFormSource();
 }
 
 function addErr(field) {
