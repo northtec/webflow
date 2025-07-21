@@ -23,7 +23,7 @@ window.fsAttributes.push([
     normaliseAccents();
     // scripts to execute in order
     let scripts = [
-      'https://cdn.jsdelivr.net/gh/northtec/webflow@1.7.24/next-intake.min.js',
+      'https://cdn.jsdelivr.net/gh/northtec/webflow@1.7.27/next-intake.min.js',
       'https://cdn.jsdelivr.net/npm/@finsweet/attributes-richtext@1/richtext.js',
       'https://cdn.jsdelivr.net/npm/@finsweet/attributes-cmsfilter@1/cmsfilter.js',
     ];

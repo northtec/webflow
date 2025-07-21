@@ -67,25 +67,29 @@ function nextIntake() {
     const intake = course.querySelectorAll(
       '.next-intake:not(.w-condition-invisible)'
     );
-    if (intake.length) {
-      const dates = Array.from(intake, (intake) => intake.textContent);
-      const formattedDates = dates.map((date) => formatDate(date)).join(', ');
-
-      dateContainer.textContent = nextDate(formattedDates);
-      return;
-    }
 
     const intakelocation = course.querySelector(
       '.next-intake-location:not(.w-condition-invisible)'
     );
+
+    const nointake = course.querySelector(
+      '.no-intake-set div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
+    );
+
+    if (intake.length) {
+      const dates = Array.from(intake, (intake) => intake.textContent);
+      const formattedDates = dates.map((date) => formatDate(date)).join(', ');
+      const nextText = nextDate(formattedDates);
+
+      dateContainer.textContent = nextText || 'Starting now';
+      return;
+    }
+
     if (intakelocation) {
       dateContainer.textContent = intakelocation.textContent;
       return;
     }
 
-    const nointake = course.querySelector(
-      '.no-intake-set div:not(.w-condition-invisible):not(.w-dyn-bind-empty)'
-    );
     if (nointake) {
       dateContainer.textContent = nointake.textContent;
       return;
