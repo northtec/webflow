@@ -23,7 +23,9 @@ body {
 .footer-tp,
 .govt-logo,
 .breadcrumbs,
-.div-block-48 {
+.div-block-48,
+.div-block-55,
+.w-editor-bem-EditorApp {
   display: none !important;
 }
 
