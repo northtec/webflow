@@ -105,6 +105,26 @@ const prefillFormFromURL = function () {
     qualField.readOnly = true;
     locationField.readOnly = true;
     startField.readOnly = true;
+    if (intake.dataset.intakeType === 'Short Course') {
+      const intakeFee =
+        intake.dataset.feeIntake ||
+        intake.dataset.feeDiscounted ||
+        intake.dataset.feeProgramme ||
+        intake.dataset.feeProgrammeOld ||
+        'TBC';
+      if (intakeFee.startsWith('$')) {
+        document.querySelector('.windcave-payment').classList.remove('hidden');
+        document.getElementById('paymentCourseFee').textContent = intakeFee;
+        const windcaveLink = document.querySelector(
+          '.windcave-payment a.windcave'
+        );
+
+        const url = new URL(windcaveLink.href);
+        url.searchParams.set('amount', intakeFee.slice(1));
+        url.searchParams.set('txndata1', 'Course Fees');
+        windcaveLink.href = url.toString();
+      }
+    }
     const intakeName = intake.innerText.toLowerCase();
     if (intakeName.includes('part time') || intakeName.includes('part-time'))
       setStudyPreference('Part Time');
